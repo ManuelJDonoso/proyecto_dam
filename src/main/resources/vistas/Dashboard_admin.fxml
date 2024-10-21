@@ -12,7 +12,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="root" accessibleRole="SCROLL_BAR" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="467.0" prefWidth="601.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.Dashboard_adminController">
+<VBox fx:id="root" accessibleRole="SCROLL_BAR" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="655.0" prefWidth="601.0" style="-fx-background-color: #2d3447;" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.Dashboard_adminController">
    <children>
       <MenuBar>
         <menus>
@@ -128,6 +128,46 @@
                      </graphic>
                   </JFXButton>
                   <Label text="ELIMINAR USUARIO" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+         </children>
+      </FlowPane>
+      <FlowPane alignment="BASELINE_CENTER" layoutX="10.0" layoutY="36.0" prefHeight="200.0" prefWidth="200.0" rowValignment="TOP">
+         <children>
+            <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <JFXButton alignment="BOTTOM_CENTER" focusTraversable="false" onAction="#anadir_Asignatura" prefHeight="142.0" prefWidth="112.0" text=" " textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/app/blue_books_binders.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Label text="Añadir Asignatura" textFill="WHITE">
+                     <font>
+                        <Font name="System Bold Italic" size="14.0" />
+                     </font>
+                  </Label>
+               </children>
+            </VBox>
+            <VBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="200.0" prefWidth="100.0">
+               <children>
+                  <JFXButton alignment="BOTTOM_CENTER" focusTraversable="false" onAction="#Salir_login" prefHeight="142.0" prefWidth="112.0" text=" " textFill="WHITE">
+                     <graphic>
+                        <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/app/libro.png" />
+                           </image>
+                        </ImageView>
+                     </graphic>
+                  </JFXButton>
+                  <Label text="Modificar Asignatura" textFill="WHITE">
                      <font>
                         <Font name="System Bold Italic" size="14.0" />
                      </font>

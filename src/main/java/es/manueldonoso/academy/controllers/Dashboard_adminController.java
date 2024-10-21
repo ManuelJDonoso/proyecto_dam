@@ -80,4 +80,9 @@ public class Dashboard_adminController implements Initializable {
        Session.finSession();
        Metodos.cargarLogin();
     }
+
+    @FXML
+    private void anadir_Asignatura(ActionEvent event) {
+        Metodos.InsertarAsignatura(root);
+    }
 }

@@ -4,8 +4,6 @@
  */
 package es.manueldonoso.academy.controllers;
 
-import com.jfoenix.controls.JFXTextField;
-import es.manueldonoso.academy.util.ConexionBDLocal;
 import es.manueldonoso.academy.util.Metodos;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -13,17 +11,17 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
+import javafx.scene.text.Text;
 
 /**
  * FXML Controller class
  *
  * @author donpe
  */
-public class Insertar_AsignaturaController implements Initializable {
+public class MensajeDeErrorController implements Initializable {
 
     @FXML
-    private JFXTextField txt_asignatura;
+    private Text mensaje_error;
     @FXML
     private AnchorPane root;
 
@@ -33,16 +31,18 @@ public class Insertar_AsignaturaController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-     
     }    
 
-    
-    @FXML
-    private void AgregarAsignatura(ActionEvent event) {
-        ConexionBDLocal db =new ConexionBDLocal();
-       int i= db.AnadirAsignatura(txt_asignatura.getText(),root);
-       if (i==1){Metodos.closeEffect(root);}
-        
+    public void setMensaje_error(String mensaje) {
+       mensaje_error.setText(mensaje);
     }
+
+    @FXML
+    private void Accion_boton_aceptar(ActionEvent event) {
+        Metodos.closeEffect(root);
+    }
+    
+    
+    
     
 }

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.Insertar_AsignaturaController">
-    
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.Insertar_AsignaturaController">
+   <children>
+      <JFXButton layoutX="188.0" layoutY="200.0" onAction="#AgregarAsignatura" text="Agregar" />
+      <JFXTextField fx:id="txt_asignatura" layoutX="150.0" layoutY="112.0" />
+   </children>
 </AnchorPane>

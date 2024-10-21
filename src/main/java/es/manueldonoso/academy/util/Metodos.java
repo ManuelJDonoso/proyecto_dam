@@ -5,6 +5,7 @@
 package es.manueldonoso.academy.util;
 
 import es.manueldonoso.academy.Main;
+import es.manueldonoso.academy.controllers.MensajeDeErrorController;
 import es.manueldonoso.academy.modelos.Usuario;
 import java.io.IOException;
 import java.util.logging.Level;
@@ -131,7 +132,7 @@ public class Metodos {
         primaryStage.show();
     }
 
-    public static void CargarDasboard(Usuario user,Node root) {
+    public static void CargarDasboard(Usuario user, Node root) {
         Session.setUsuarioLogin(user);
         try {
             Stage primaryStage = new Stage();
@@ -183,4 +184,78 @@ public class Metodos {
         }
     }
 
+    public static void InsertarAsignatura(Pane root) {
+
+        Stage primaryStage = new Stage();
+        // Cargo la ventana inicial
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("/vistas/Insertar_Asignatura.fxml"));
+
+        // Ventana a cargar
+        AnchorPane ventana;
+        try {
+            ventana = (AnchorPane) loader.load();
+            // Creo la escena
+            Scene scene = new Scene(ventana);
+
+            // Modifico el stage
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("Mis Datos");
+            // primaryStage.setMaximized(true);
+
+            Stage stage = new Stage();
+            // Modifico el stage
+            stage.setScene(scene);
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(false);
+            stage.setIconified(false);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //  primaryStage.show();
+    }
+    
+     public static void error(Pane root) {
+
+        Stage primaryStage = new Stage();
+        // Cargo la ventana inicial
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("/vistas/Mensaje_error.fxml"));
+
+        // Ventana a cargar
+        AnchorPane ventana;
+        try {
+            ventana = (AnchorPane) loader.load();
+            MensajeDeErrorController controller = loader.getController();
+            
+            controller.setMensaje_error("esto es una prueba");
+            
+            
+            // Creo la escena
+            Scene scene = new Scene(ventana);
+
+            // Modifico el stage
+            primaryStage.setScene(scene);
+            primaryStage.setTitle("error");
+            // primaryStage.setMaximized(true);
+
+            Stage stage = new Stage();
+            // Modifico el stage
+            stage.setScene(scene);
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(false);
+            stage.setIconified(false);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+        //  primaryStage.show();
+    }
 }

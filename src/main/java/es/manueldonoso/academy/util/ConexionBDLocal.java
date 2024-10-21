@@ -12,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.layout.Pane;
 
 /**
  *
@@ -203,5 +204,24 @@ public class ConexionBDLocal {
         }
 
         CerrarConexion();
+    }
+    
+    public int AnadirAsignatura(String Asignatura, Pane root){
+        int i=0;
+        String sql ="INSERT INTO \"main\".\"Asignaturas\" (\"asignatura\", \"activa\") "
+                + "VALUES ('"+Asignatura+"','1')";
+        
+        
+         CrearConexion();
+
+        try {
+           i=  stm.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            Metodos.error(root);
+        }
+        
+        CerrarConexion();
+        return i;
     }
 }

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
+
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.MensajeDeErrorController">
+   <children>
+      <ImageView fitHeight="113.0" fitWidth="105.0" layoutX="70.0" layoutY="148.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../images/app/exit_close_error.png" />
+         </image>
+      </ImageView>
+      <JFXButton layoutX="240.0" layoutY="300.0" onAction="#Accion_boton_aceptar" text="Aceptar">
+         <font>
+            <Font name="System Bold" size="24.0" />
+         </font>
+      </JFXButton>
+      <TextFlow layoutX="235.0" layoutY="148.0" lineSpacing="10.0" prefHeight="105.0" prefWidth="351.0">
+         <children>
+            <Text fx:id="mensaje_error" strokeType="OUTSIDE" strokeWidth="0.0" text="esto es un texto de prueba muy greander  asbnñfdsnv  añkjgpiesgfvbijhb vlksdbaijh vbiiyedvbkjv b vksvbjk mnlsdvklnnk dsdo hnuiarh bl v" wrappingWidth="364.78515625" />
+         </children>
+      </TextFlow>
+      <TextFlow layoutX="22.0" layoutY="14.0" prefHeight="86.0" prefWidth="557.0" textAlignment="CENTER">
+         <children>
+            <Text fill="RED" strokeType="OUTSIDE" strokeWidth="0.0" text="ERROR" wrappingWidth="510.46875">
+               <font>
+                  <Font size="64.0" />
+               </font>
+            </Text>
+         </children>
+      </TextFlow>
+   </children>
+</AnchorPane>
