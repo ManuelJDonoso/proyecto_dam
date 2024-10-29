@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.Statement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.layout.Pane;
@@ -37,6 +38,7 @@ public class ConexionBDLocal {
 
     public ResultSet consulta(String Consulta) {
         CrearConexion();
+        
         ResultSet rt = null;
         try {
             rt = stm.executeQuery(Consulta);
@@ -48,6 +50,7 @@ public class ConexionBDLocal {
             ex.printStackTrace();
         }
         System.out.println(rt);
+        CerrarConexion();
         return rt;
 
     }
@@ -205,23 +208,42 @@ public class ConexionBDLocal {
 
         CerrarConexion();
     }
-    
-    public int AnadirAsignatura(String Asignatura, Pane root){
-        int i=0;
-        String sql ="INSERT INTO \"main\".\"Asignaturas\" (\"asignatura\", \"activa\") "
-                + "VALUES ('"+Asignatura+"','1')";
-        
-        
-         CrearConexion();
+
+    public int AnadirAsignatura(String Asignatura, Pane root) {
+        int i = 0;
+        String sql = "INSERT INTO \"main\".\"Asignaturas\" (\"asignatura\", \"activa\") "
+                + "VALUES ('" + Asignatura + "','1')";
+
+        CrearConexion();
 
         try {
-           i=  stm.executeUpdate(sql);
+            i = stm.executeUpdate(sql);
 
         } catch (SQLException ex) {
             Metodos.error(root);
         }
-        
+
         CerrarConexion();
         return i;
+    }
+
+    public ArrayList listarAsignaturas() {
+        CrearConexion();
+        ResultSet rt = null;
+        String sql = "SELECT asignatura FROM Asignaturas";
+        ArrayList<String> listaAsignaturas = new ArrayList<>();
+        try {
+            rt = stm.executeQuery(sql);
+
+            while (rt.next()) {
+               listaAsignaturas.add(rt.getString("asignatura"));
+                 System.out.println(rt.getString("asignatura"));
+            }
+        } catch (SQLException ex) {
+
+        }
+        CerrarConexion();
+        return listaAsignaturas;
+        
     }
 }
