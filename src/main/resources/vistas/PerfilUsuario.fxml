@@ -15,8 +15,7 @@
 <?import javafx.scene.text.Text?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
-
-<AnchorPane id="AnchorPane" prefHeight="456.0" prefWidth="733.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/22" fx:controller="es.manueldonoso.academy.controllers.PerfilUsuarioController">
+<AnchorPane id="AnchorPane" fx:id="root" prefHeight="456.0" prefWidth="733.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.PerfilUsuarioController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" stroke="BLACK" strokeType="INSIDE" width="742.0" />
       <Text fill="WHITE" layoutX="286.0" layoutY="40.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mis Datos">
@@ -71,45 +70,45 @@
                   <Font name="System Bold Italic" size="18.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="txt_nombre" GridPane.columnIndex="1" GridPane.columnSpan="2">
+            <JFXTextField fx:id="txt_nombre" focusTraversable="false" onKeyTyped="#acep_btn_enable" GridPane.columnIndex="1" GridPane.columnSpan="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXTextField fx:id="txt_apellidos" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
+            <JFXTextField fx:id="txt_apellidos" focusTraversable="false" onKeyTyped="#acep_btn_enable" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="1">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXTextField fx:id="txt_direccion" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
+            <JFXTextField fx:id="txt_direccion" focusTraversable="false" onKeyTyped="#acep_btn_enable" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="2">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXTextField fx:id="txt_telefono" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
+            <JFXTextField fx:id="txt_telefono" focusTraversable="false" onKeyTyped="#acep_btn_enable" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="3">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXTextField fx:id="txt_email" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
+            <JFXTextField fx:id="txt_email" focusTraversable="false" onKeyTyped="#acep_btn_enable" GridPane.columnIndex="1" GridPane.columnSpan="2" GridPane.rowIndex="4">
                <GridPane.margin>
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXButton fx:id="btn_cargarF" text="Cargar Foto" GridPane.columnIndex="4" GridPane.rowIndex="4" />
-            <JFXButton fx:id="btn_eliminar_Fotps" text="Eliminar foto" GridPane.columnIndex="6" GridPane.rowIndex="4" />
-            <JFXButton fx:id="btn_tomarFoto" onAction="#TomarFoto" text="Tomar Foto" GridPane.columnIndex="5" GridPane.rowIndex="4" />
+            <JFXButton fx:id="btn_cargarF" focusTraversable="false" text="Cargar Foto" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <JFXButton fx:id="btn_eliminar_Fotps" focusTraversable="false" onAction="#imagen_default" text="Eliminar foto" GridPane.columnIndex="6" GridPane.rowIndex="4" />
+            <JFXButton fx:id="btn_tomarFoto" focusTraversable="false" onAction="#TomarFoto" text="Tomar Foto" GridPane.columnIndex="5" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
                <children>
-                  <ImageView fx:id="iw" fitHeight="188.0" fitWidth="277.0" layoutX="1.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imageView" fitHeight="188.0" fitWidth="277.0" layoutX="1.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/incorgnito.png" />
                      </image>
                   </ImageView>
                </children>
             </AnchorPane>
-            <JFXButton fx:id="btn_cancelar" cancelButton="true" onAction="#cancelar_registro" text="Cancelar" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-            <JFXButton fx:id="btn_aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <JFXButton fx:id="btn_cancelar" cancelButton="true" focusTraversable="false" onAction="#cancelar_registro" text="Cancelar" GridPane.columnIndex="5" GridPane.rowIndex="6" />
+            <JFXButton fx:id="btn_avalidar" disable="true" focusTraversable="false" onAction="#btn_aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.rowIndex="6" />
          </children>
       </GridPane>
    </children>

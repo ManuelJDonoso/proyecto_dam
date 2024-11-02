@@ -85,4 +85,9 @@ public class Dashboard_adminController implements Initializable {
     private void anadir_Asignatura(ActionEvent event) {
         Metodos.InsertarAsignatura(root);
     }
+
+    @FXML
+    private void modificar_estado_asignaturas(ActionEvent event) {
+        Metodos.CargarModificarEstadoAsignaturas(root);
+    }
 }

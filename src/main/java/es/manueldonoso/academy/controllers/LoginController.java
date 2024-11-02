@@ -89,13 +89,13 @@ public class LoginController implements Initializable {
         String nombre = txt_nombre.getText();
         String pass = txt_pass.getText();
         if (rb_local.isSelected()) {
-            ConexionBDLocal BD = new ConexionBDLocal();
-            if (BD.LoginCorrecto(nombre, pass)) {
-                Session.setUsuarioLogin(BD.user(nombre, pass));
+            
+            if (ConexionBDLocal.LoginCorrecto(nombre, pass)) {
+                Session.setUsuarioLogin(ConexionBDLocal.user(nombre, pass));
 
                 Metodos.CargarDasboard(Session.getUsuarioLogin(),root);
             }
-            BD.CerrarConexion();
+           
         } else if (rb_online.isSelected()) {
             System.out.println("Opcion no implementada");
         }
@@ -187,8 +187,8 @@ public class LoginController implements Initializable {
 
     private void comprobarInstalacion() {
 
-        ConexionBDLocal DB = new ConexionBDLocal();
-        if (DB.ExisteAdmin()) {
+    
+        if (ConexionBDLocal.ExisteAdmin()) {
             rb_local.setDisable(false);
             rb_local.setSelected(true);
             Panel_registrar.setVisible(false);

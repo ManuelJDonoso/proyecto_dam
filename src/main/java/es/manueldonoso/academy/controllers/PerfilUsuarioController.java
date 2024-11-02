@@ -4,15 +4,32 @@
  */
 package es.manueldonoso.academy.controllers;
 
+import animatefx.animation.Swing;
+import com.github.sarxos.webcam.Webcam;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import es.manueldonoso.academy.util.Metodos;
 import es.manueldonoso.academy.util.Session;
+import java.awt.image.BufferedImage;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.concurrent.atomic.AtomicReference;
+import javafx.application.Platform;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.AnchorPane;
+import javafx.embed.swing.SwingFXUtils;
 
 /**
  * FXML Controller class
@@ -38,11 +55,14 @@ public class PerfilUsuarioController implements Initializable {
     @FXML
     private JFXButton btn_tomarFoto;
     @FXML
-    private ImageView iw;
-    @FXML
     private JFXButton btn_cancelar;
-    @FXML
     private JFXButton btn_aceptar;
+    @FXML
+    private AnchorPane root;
+    @FXML
+    private JFXButton btn_avalidar;
+    @FXML
+    private ImageView imageView;
 
     /**
      * Initializes the controller class.
@@ -50,21 +70,70 @@ public class PerfilUsuarioController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        
+
         txt_nombre.setText(Session.getUsuarioLogin().getNombre());
         txt_apellidos.setText(Session.getUsuarioLogin().getApellidos());
         txt_direccion.setText(Session.getUsuarioLogin().getDireccion());
         txt_email.setText(Session.getUsuarioLogin().getEmail());
         txt_telefono.setText(Session.getUsuarioLogin().getTelefono());
-        
-    }    
+
+    }
+
+    private BooleanProperty estadoCamara = new SimpleBooleanProperty(false);
+    private AtomicReference<Webcam> selWebCam = new AtomicReference<>(null); // Usar AtomicReference para Webcam
+    private AtomicReference<BufferedImage> bufferedImage = new AtomicReference<>(null); // Usar AtomicReference para BufferedImage
+    private ObjectProperty<Image> imageProperty = new SimpleObjectProperty<>();
 
     @FXML
     private void TomarFoto(ActionEvent event) {
+
+        System.out.println(selWebCam.get());
+        if (selWebCam.get() != null) {
+            if (selWebCam.get().isOpen()) {
+                System.out.println("enable");
+                btn_eliminar_Fotps.setDisable(false);
+                btn_cargarF.setDisable(false);
+            } else {
+                btn_eliminar_Fotps.setDisable(true);
+                btn_cargarF.setDisable(true);
+            }
+        } else {
+            btn_eliminar_Fotps.setDisable(true);
+            btn_cargarF.setDisable(true);
+        }
+// Desenlazar la propiedad de imagen si está enlazada
+        imageView.imageProperty().unbind();
+
+        // Establecer la imagen de carga
+        imageView.setImage(new Image(getClass().getResourceAsStream("/images/app/cargando.gif")));
+
+        // Llamar al método de captura de foto
+        Metodos.CapturarFoto(imageView, estadoCamara, selWebCam, bufferedImage, imageProperty);
+
+        // Volver a enlazar la propiedad de imagen
+        imageView.imageProperty().bind(imageProperty);
+
     }
 
     @FXML
     private void cancelar_registro(ActionEvent event) {
+        Metodos.cerrarCamara(estadoCamara, selWebCam);
+        Metodos.closeEffect(root);
     }
-    
+
+    @FXML
+    private void btn_aceptar(ActionEvent event) {
+        Metodos.closeEffect(root);
+    }
+
+    @FXML
+    private void acep_btn_enable() {
+        btn_avalidar.setDisable(false);
+    }
+
+    @FXML
+    private void imagen_default(ActionEvent event) {
+        Metodos.imagenView_cambiarImage(this.getClass(), imageView, "/images/incorgnito.png");
+
+    }
 }

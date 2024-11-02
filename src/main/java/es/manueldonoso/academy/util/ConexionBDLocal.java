@@ -22,10 +22,10 @@ import javafx.scene.layout.Pane;
 public class ConexionBDLocal {
 
     private static final String DB_URL = "jdbc:sqlite:src/main/resources/db/BaseDatos.db";
-    private Connection conexion = null;
-    public Statement stm = null;
+    private static Connection conexion = null;
+    private static Statement stm = null;
 
-    public void CrearConexion() {
+    public static void CrearConexion() {
         System.out.println("Creando Conexion");
         try {
             Class.forName("org.sqlite.JDBC");
@@ -36,26 +36,38 @@ public class ConexionBDLocal {
         }
     }
 
-    public ResultSet consulta(String Consulta) {
+    public static ResultSet consulta(String Consulta) {
         CrearConexion();
         
         ResultSet rt = null;
         try {
             rt = stm.executeQuery(Consulta);
-            while (rt.next()) {
-                System.out.println(rt.getString(1) + " " + rt.getString(2));
-            }
+            
 
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        System.out.println(rt);
-        CerrarConexion();
+      
+     
         return rt;
 
     }
 
-    public boolean LoginCorrecto(String user, String pass) {
+    public static int actualizarBBDD(String sql){
+           int i=0;
+        CrearConexion();
+        try {
+           i= stm.executeUpdate(sql);
+
+        } catch (SQLException ex) {
+            System.err.println("Error al insertar datos");
+        }
+
+        CerrarConexion();
+        return i;
+    }
+    
+    public static boolean LoginCorrecto(String user, String pass) {
         boolean correcto = false;
 
         CrearConexion();
@@ -79,7 +91,7 @@ public class ConexionBDLocal {
         return correcto;
     }
 
-    public void CerrarConexion() {
+    public static void CerrarConexion() {
         try {
             conexion.close();
             System.out.println("Conexion finalizada");
@@ -88,7 +100,7 @@ public class ConexionBDLocal {
         }
     }
 
-    public boolean ExisteAdmin() {
+    public static boolean ExisteAdmin() {
         boolean correcto = false;
 
         CrearConexion();
@@ -112,7 +124,7 @@ public class ConexionBDLocal {
         return correcto;
     }
 
-    public int tipo_usuario(String user) {
+    public static int tipo_usuario(String user) {
         CrearConexion();
         ResultSet rt = null;
         String sql = "SELECT fk_ClaseUser FROM Usuarios WHERE Usuario = '" + user + "'";
@@ -128,7 +140,7 @@ public class ConexionBDLocal {
         return tipo;
     }
 
-    public Usuario user(String nick, String pass) {
+    public static Usuario user(String nick, String pass) {
         CrearConexion();
         ResultSet rt = null;
         String sql = "SELECT id,Usuario,Pass,fk_ClaseUser,Nombre,Apellidos,Direccion,Telefono,Email,urlFoto FROM Usuarios WHERE Usuario='" + nick + "' AND Pass='" + pass + "';";
@@ -155,7 +167,7 @@ public class ConexionBDLocal {
         return user;
     }
 
-    public void CrearAdministrativo(Usuario user) {
+    public static void CrearAdministrativo(Usuario user) {
         String nombre = user.getNombre();
         String apellidos = user.getApellidos();
         String Direccion = user.getDireccion();
@@ -190,7 +202,7 @@ public class ConexionBDLocal {
         CerrarConexion();
     }
 
-    public void CrearDuenoContrato(Usuario user) {
+    public static void CrearDuenoContrato(Usuario user) {
         String nombre = user.getNombre();
         String apellidos = user.getApellidos();
 
@@ -209,7 +221,7 @@ public class ConexionBDLocal {
         CerrarConexion();
     }
 
-    public int AnadirAsignatura(String Asignatura, Pane root) {
+    public static int AnadirAsignatura(String Asignatura, Pane root) {
         int i = 0;
         String sql = "INSERT INTO \"main\".\"Asignaturas\" (\"asignatura\", \"activa\") "
                 + "VALUES ('" + Asignatura + "','1')";
@@ -220,14 +232,14 @@ public class ConexionBDLocal {
             i = stm.executeUpdate(sql);
 
         } catch (SQLException ex) {
-            Metodos.error(root);
+            Metodos.error(root,"La asignatura ya existe en la base de datos.");
         }
 
         CerrarConexion();
         return i;
     }
 
-    public ArrayList listarAsignaturas() {
+    public static ArrayList listarAsignaturas() {
         CrearConexion();
         ResultSet rt = null;
         String sql = "SELECT asignatura FROM Asignaturas";
@@ -246,4 +258,32 @@ public class ConexionBDLocal {
         return listaAsignaturas;
         
     }
+
+    public static ResultSet asignaturasAct(){
+    return consulta("SELECT asignatura FROM Asignaturas WHERE ACTIVA =1");
+    }
+    public static ResultSet asignaturasDes_Act(){
+    return consulta("SELECT asignatura FROM Asignaturas WHERE ACTIVA =0");
+    }
+    
+    public static void DesactivarAsignatura(String asignatura){
+    String sql ="UPDATE Asignaturas SET ACTIVA =0 WHERE asignatura='"+asignatura+"'";
+        System.out.println(sql);
+        int i = actualizarBBDD(sql);
+        if (i==1){System.out.println("Se actualizo correctamente");}else if (i==0) {
+            System.err.println("No se actualizo");
+        }
+{}
+    }
+    
+      public static void ActivarAsignatura(String asignatura){
+    String sql ="UPDATE Asignaturas SET ACTIVA =1 WHERE asignatura='"+asignatura+"'";
+        System.out.println(sql);
+        int i = actualizarBBDD(sql);
+        if (i==1){System.out.println("Se actualizo correctamente");}else if (i==0) {
+            System.err.println("No se actualizo");
+        }
+{}
+    }
+
 }

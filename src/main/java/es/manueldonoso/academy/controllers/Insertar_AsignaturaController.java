@@ -19,6 +19,8 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 
 /**
  * FXML Controller class
@@ -35,6 +37,8 @@ public class Insertar_AsignaturaController implements Initializable {
     private VBox vboxLista;
     @FXML
     private Label lb_subtitulo;
+    @FXML
+    private Label lb_subtitulo1;
 
     /**
      * Initializes the controller class.
@@ -54,6 +58,7 @@ public class Insertar_AsignaturaController implements Initializable {
             @Override
             public void accept(Object elemento) {
                  Label lb =new Label((String) " * " + elemento  );
+                 lb.setFont(Font.font("System", FontWeight.BOLD, 12));
                 vboxLista.getChildren().add(lb);
             }
         });
@@ -62,10 +67,13 @@ public class Insertar_AsignaturaController implements Initializable {
     
     @FXML
     private void AgregarAsignatura(ActionEvent event) {
+        if(txt_asignatura.getText().trim().equalsIgnoreCase("")){
+        Metodos.error(root, "El campo no puede estar vacio");
+        }else{
         ConexionBDLocal db =new ConexionBDLocal();
-       int i= db.AnadirAsignatura(txt_asignatura.getText(),root);
+       int i= db.AnadirAsignatura(txt_asignatura.getText().trim(),root);
        if (i==1){Metodos.closeEffect(root);}
-        
+        }      
     }
     
 }
