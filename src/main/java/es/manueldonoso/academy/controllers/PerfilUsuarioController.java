@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXTextField;
 import es.manueldonoso.academy.util.Metodos;
 import es.manueldonoso.academy.util.Session;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.InputStream;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -30,6 +31,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -108,7 +110,7 @@ public class PerfilUsuarioController implements Initializable {
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/app/cargando.gif")));
 
         // Llamar al método de captura de foto
-        Metodos.CapturarFoto(imageView, estadoCamara, selWebCam, bufferedImage, imageProperty);
+        Metodos.CapturarFoto(imageView, estadoCamara, selWebCam, bufferedImage, imageProperty,"temp/foto.jpg");
 
         // Volver a enlazar la propiedad de imagen
         imageView.imageProperty().bind(imageProperty);
@@ -133,7 +135,19 @@ public class PerfilUsuarioController implements Initializable {
 
     @FXML
     private void imagen_default(ActionEvent event) {
-        Metodos.imagenView_cambiarImage(this.getClass(), imageView, "/images/incorgnito.png");
+        Metodos.imagenView_cambiarImage(this.getClass(), imageView, "src/main/resources/images/incorgnito.png");
 
+    }
+
+    @FXML
+    private void btn_cargarFoto(ActionEvent event) {
+
+        File f = Metodos.openImageFileChooser();
+        System.out.println(f);
+        if (f != null) {
+            if (Metodos.copyFileToTemp(f, "src/main/resources/temp/foto.jpg")) {
+                Metodos.imagenView_cambiarImage(this.getClass(), imageView, "src/main/resources/temp/foto.jpg");
+            }
+        }
     }
 }

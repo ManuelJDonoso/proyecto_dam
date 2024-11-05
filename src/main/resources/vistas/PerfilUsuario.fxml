@@ -95,7 +95,7 @@
                   <Insets left="10.0" />
                </GridPane.margin>
             </JFXTextField>
-            <JFXButton fx:id="btn_cargarF" focusTraversable="false" text="Cargar Foto" GridPane.columnIndex="4" GridPane.rowIndex="4" />
+            <JFXButton fx:id="btn_cargarF" focusTraversable="false" onAction="#btn_cargarFoto" text="Cargar Foto" GridPane.columnIndex="4" GridPane.rowIndex="4" />
             <JFXButton fx:id="btn_eliminar_Fotps" focusTraversable="false" onAction="#imagen_default" text="Eliminar foto" GridPane.columnIndex="6" GridPane.rowIndex="4" />
             <JFXButton fx:id="btn_tomarFoto" focusTraversable="false" onAction="#TomarFoto" text="Tomar Foto" GridPane.columnIndex="5" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">

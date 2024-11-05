@@ -9,9 +9,12 @@ import es.manueldonoso.academy.Main;
 import es.manueldonoso.academy.controllers.MensajeDeErrorController;
 import es.manueldonoso.academy.modelos.Usuario;
 import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Paths;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,10 +37,12 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 import javafx.util.Duration;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -197,8 +202,7 @@ public class Metodos {
             // Modifico el stage
             primaryStage.setScene(scene);
 
-            primaryStage.setMaximized(true);
-
+            //  primaryStage.setMaximized(true);
             Metodos.closeEffect(root);
             primaryStage.show();
         } catch (IOException ex) {
@@ -425,13 +429,195 @@ public class Metodos {
         }
     }
 
-    public static void imagenView_cambiarImage(Class<?> claseReferencia,ImageView imageView, String Url) {
-     try {
-        imageView.imageProperty().unbind();
-        imageView.setImage(new Image(claseReferencia.getResource(Url).toExternalForm()));
+    public static void imagenView_cambiarImage(Class<?> claseReferencia, ImageView imageView, String Url) {
+        try {
+            File file = new File(Url);
 
-    } catch (Exception e) {
-        System.out.println("Error cargando la imagen: " + e.getMessage());
+            Image image = new Image(file.toURI().toString());
+
+            imageView.imageProperty().unbind();
+
+            imageView.setImage(image);
+
+        } catch (Exception e) {
+            System.out.println("Error cargando la imagen: " + e.getMessage());
+        }
     }
+
+    public static byte[] ImageToByte(Image image) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        if (image != null) {
+            BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+            try {
+                ImageIO.write(bImage, "jpg", baos);
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        byte[] res = baos.toByteArray();
+
+        try {
+            baos.close();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return res;
+    }
+
+    public static void saveImageToFile(Image image, String filePath) {
+        if (image != null) {
+            // Convertir la imagen de JavaFX a BufferedImage
+            BufferedImage bImage = SwingFXUtils.fromFXImage(image, null);
+            try {
+                // Guardar la imagen en la ruta especificada
+                File outputFile = new File(filePath);
+                ImageIO.write(bImage, "jpg", outputFile);
+                System.out.println("Imagen guardada en: " + filePath);
+            } catch (IOException e) {
+                System.out.println("Error al guardar la imagen: " + e.getMessage());
+            }
+        } else {
+            System.out.println("La imagen es nula, no se puede guardar.");
+        }
+    }
+
+    public static File openImageFileChooser() {
+        Stage stage = null;
+        FileChooser fileChooser = new FileChooser();
+
+        // Configura el título del diálogo
+        fileChooser.setTitle("Seleccionar imagen");
+
+        // Agrega filtros de extensión para limitar a archivos JPG y PNG
+        FileChooser.ExtensionFilter extFilterJPG = new FileChooser.ExtensionFilter("Archivos JPG (*.jpg)", "*.jpg");
+        FileChooser.ExtensionFilter extFilterPNG = new FileChooser.ExtensionFilter("Archivos PNG (*.png)", "*.png");
+        fileChooser.getExtensionFilters().addAll(extFilterJPG, extFilterPNG);
+
+        // Muestra el diálogo de selección de archivo y obtiene el archivo seleccionado
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        // Retorna el archivo seleccionado (puede ser null si el usuario canceló)
+        return selectedFile;
+    }
+
+    public static void copyFile(String sourcePath, String destinationPath) {
+        Path source = Path.of(sourcePath);
+        Path destination = Path.of(destinationPath);
+
+        try {
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+            System.out.println("Archivo copiado correctamente a: " + destinationPath);
+        } catch (IOException e) {
+            System.out.println("Error al copiar el archivo: " + e.getMessage());
+        }
+    }
+
+    public static boolean copyFileToTemp(File f, String Destino) {
+        // Ruta del archivo de origen
+        boolean copia = false;
+
+        Path source = Path.of(f.getAbsolutePath());
+
+        // Ruta de destino relativa al proyecto, renombrando el archivo
+        Path destination = Path.of(Destino);
+
+        try {
+            // Crear el directorio "temp" si no existe
+            if (!Files.exists(destination.getParent())) {
+                Files.createDirectories(destination.getParent());
+            }
+
+            // Copiar el archivo y renombrarlo en la nueva ubicación
+            Files.copy(source, destination, StandardCopyOption.REPLACE_EXISTING);
+
+            System.out.println("Archivo copiado correctamente a: " + destination.toAbsolutePath());
+            copia = true;
+        } catch (IOException e) {
+            System.out.println("Error al copiar el archivo: " + e.getMessage());
+        }
+        return copia;
+    }
+    
+     public static void CapturarFoto(ImageView imageView, BooleanProperty estadoCamara,
+                                    AtomicReference<Webcam> selWebCam, AtomicReference<BufferedImage> bufferedImage,
+                                    ObjectProperty<Image> imageProperty,String path) {
+
+        if (Webcam.getWebcams().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "No hay cámaras web disponibles", ButtonType.OK);
+            alert.showAndWait();
+            System.out.println("No hay cámaras");
+            return;
+        }
+
+        if (!estadoCamara.get()) {
+            imageView.imageProperty().unbind();
+
+            Task<Void> webCamInitializer = new Task<>() {
+                @Override
+                protected Void call() throws Exception {
+                    if (selWebCam.get() == null || !selWebCam.get().isOpen()) {
+                        selWebCam.set(Webcam.getWebcams().get(0));
+                        selWebCam.get().open();
+                    }
+                    estadoCamara.set(true);
+
+                    Task<Void> task = new Task<>() {
+                        @Override
+                        protected Void call() throws Exception {
+                            while (estadoCamara.get()) {
+                                try {
+                                    BufferedImage currentImage = selWebCam.get().getImage();
+                                    bufferedImage.set(currentImage);
+
+                                    if (bufferedImage.get() != null) {
+                                        Platform.runLater(() -> {
+                                            final Image mainImage = SwingFXUtils.toFXImage(bufferedImage.get(), null);
+                                            imageProperty.set(mainImage);
+                                            // Guardar la imagen en 
+                                            guardarImagen(bufferedImage.get(), path);
+                                        });
+                                        bufferedImage.get().flush();
+                                    }
+                                } catch (Exception e) {
+                                    e.printStackTrace();
+                                }
+                            }
+                            return null;
+                        }
+                    };
+
+                    Thread th = new Thread(task);
+                    th.setDaemon(true);
+                    th.start();
+                    imageView.imageProperty().bind(imageProperty);
+                    return null;
+                }
+            };
+
+            Thread webcamThread = new Thread(webCamInitializer);
+            webcamThread.setDaemon(true);
+            webcamThread.start();
+        } else {
+            estadoCamara.set(false);
+            if (selWebCam.get() != null) {
+                selWebCam.get().close();
+            }
+        }
+    }
+
+    private static void guardarImagen(BufferedImage imagen, String relativePath) {
+        // Obtener la ruta absoluta del archivo en el sistema de archivos
+        String rutaAbsoluta = new File("src/main/resources/" + relativePath).getAbsolutePath();
+        File outputFile = new File(rutaAbsoluta);
+
+        try {
+            // Asegúrate de que el directorio existe
+            outputFile.getParentFile().mkdirs();
+            ImageIO.write(imagen, "jpg", outputFile);
+            System.out.println("Imagen guardada en: " + outputFile.getPath());
+        } catch (IOException e) {
+            System.out.println("Error al guardar la imagen: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
 }
