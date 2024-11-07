@@ -4,6 +4,8 @@
  */
 package es.manueldonoso.academy.modelos;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author donpe
@@ -11,6 +13,7 @@ package es.manueldonoso.academy.modelos;
 public class Usuario {
     private String nombre,apellidos,direccion,telefono,email,urlFoto,nick,pass;
     private int tipo,id;
+    private ArrayList<String> Asignaturas=new ArrayList<>();
 
     public String getNombre() {
         return nombre;
@@ -92,15 +95,31 @@ public class Usuario {
         this.tipo = tipo;
     }
 
+    public ArrayList<String> getAsignaturas() {
+        return Asignaturas;
+    }
+
+    public void setAsignaturas(ArrayList<String> Asignaturas) {
+        this.Asignaturas = Asignaturas;
+    }
+
+    public void ElininarAsignatura(String asignatura){
+        this.Asignaturas.remove(asignatura);
+    }
     
+    public void addAsignatura(String asignatura){
+        this.Asignaturas.add(asignatura);
+    }
 
     public Usuario() {
     }
 
     @Override
     public String toString() {
-        return "Usuario{" + "nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion + ", telefono=" + telefono + ", email=" + email + ", urlFoto=" + urlFoto + ", nick=" + nick + ", pass=" + pass + ", tipo=" + tipo + ", id=" + id + '}';
+        return "Usuario{" + "nombre=" + nombre + ", apellidos=" + apellidos + ", direccion=" + direccion + ", telefono=" + telefono + ", email=" + email + ", urlFoto=" + urlFoto + ", nick=" + nick + ", pass=" + pass + ", tipo=" + tipo + ", id=" + id + ", Asignaturas=" + Asignaturas + '}';
     }
+
+    
     
     
 }

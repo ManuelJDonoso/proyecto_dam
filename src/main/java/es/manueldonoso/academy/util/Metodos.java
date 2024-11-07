@@ -6,6 +6,8 @@ package es.manueldonoso.academy.util;
 
 import com.github.sarxos.webcam.Webcam;
 import es.manueldonoso.academy.Main;
+import es.manueldonoso.academy.controllers.AltaUsuarioController;
+import es.manueldonoso.academy.controllers.Asignar_asignaturasController;
 import es.manueldonoso.academy.controllers.MensajeDeErrorController;
 import es.manueldonoso.academy.modelos.Usuario;
 import java.awt.image.BufferedImage;
@@ -15,6 +17,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.sql.SQLException;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -128,6 +131,76 @@ public class Metodos {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.setResizable(false);
             stage.setIconified(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            darMovimientoStage(stage);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static void nuevoUsuario(VBox root, Usuario user) {
+        try {
+            Stage primaryStage = new Stage();
+            // Cargo la ventana inicial
+            FXMLLoader loader = new FXMLLoader();
+            Stage stage = new Stage();
+            loader.setLocation(Main.class.getResource("/vistas/AltaUsuario.fxml"));
+
+            // Ventana a cargar
+            AnchorPane ventana = (AnchorPane) loader.load();
+
+            // Obtengo el controlador y le paso el objeto Usuario
+            AltaUsuarioController controller = loader.getController();
+            controller.setUsuario(user);
+
+            // Creo la escena
+            Scene scene = new Scene(ventana);
+
+            // Modifico el stage
+            stage.setScene(scene);
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(false);
+            stage.setIconified(false);
+            stage.initStyle(StageStyle.UNDECORATED);
+            darMovimientoStage(stage);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Main.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+    }
+
+    public static void asignarAsignatas(AnchorPane root, Usuario user) {
+        try {
+            Stage primaryStage = new Stage();
+            // Cargo la ventana inicial
+            FXMLLoader loader = new FXMLLoader();
+            Stage stage = new Stage();
+            loader.setLocation(Main.class.getResource("/vistas/Asignar_asignaturas.fxml"));
+
+            // Ventana a cargar
+            AnchorPane ventana = (AnchorPane) loader.load();
+
+            // Obtengo el controlador y le paso el objeto Usuario
+            Asignar_asignaturasController controller = loader.getController();
+            controller.setUsuario(user);
+
+            // Creo la escena
+            Scene scene = new Scene(ventana);
+
+            // Modifico el stage
+            stage.setScene(scene);
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(false);
+            stage.setIconified(false);
+            //stage.initStyle(StageStyle.UNDECORATED);
+            darMovimientoStage(stage);
             stage.showAndWait();
 
         } catch (IOException ex) {
@@ -288,6 +361,47 @@ public class Metodos {
         }
 
         //  primaryStage.show();
+    }
+
+    public static void AbrirBuscarUsuario(Pane root) {
+        System.out.println("abrir buscar formulario");
+        Stage primaryStage = new Stage();
+        // Cargo la ventana inicial
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("/vistas/BuscaUsuario.fxml"));
+
+        // Ventana a cargar
+        VBox ventana;
+        try {
+            ventana = (VBox) loader.load();
+            // Creo la escena
+            Scene scene = new Scene(ventana);
+
+            // Modifico el stage
+            primaryStage.setScene(scene);
+
+            // primaryStage.setMaximized(true);
+            Stage stage = new Stage();
+            // Modifico el stage
+            stage.setScene(scene);
+            stage.initOwner(root.getScene().getWindow());
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.setResizable(true);
+            stage.setIconified(false);
+//            stage.setTitle("Insertar asignatura");
+//
+//            // Configurar el ícono del Stage
+//            String urlLogo = "/images/app/edit_log.png"; // Ruta del icono
+//
+//            icon_stag_person(urlLogo, stage);
+            stage.initStyle(StageStyle.UNDECORATED);
+            darMovimientoStage(stage);
+            stage.showAndWait();
+
+        } catch (IOException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
     }
 
     public static void error(Pane root, String mensaje) {
@@ -512,7 +626,7 @@ public class Metodos {
         }
     }
 
-    public static boolean copyFileToTemp(File f, String Destino) {
+    public static boolean copyFile(File f, String Destino) {
         // Ruta del archivo de origen
         boolean copia = false;
 
@@ -537,10 +651,10 @@ public class Metodos {
         }
         return copia;
     }
-    
-     public static void CapturarFoto(ImageView imageView, BooleanProperty estadoCamara,
-                                    AtomicReference<Webcam> selWebCam, AtomicReference<BufferedImage> bufferedImage,
-                                    ObjectProperty<Image> imageProperty,String path) {
+
+    public static void CapturarFoto(ImageView imageView, BooleanProperty estadoCamara,
+            AtomicReference<Webcam> selWebCam, AtomicReference<BufferedImage> bufferedImage,
+            ObjectProperty<Image> imageProperty, String path) {
 
         if (Webcam.getWebcams().isEmpty()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION, "No hay cámaras web disponibles", ButtonType.OK);
@@ -619,5 +733,22 @@ public class Metodos {
             System.out.println("Error al guardar la imagen: " + e.getMessage());
             e.printStackTrace();
         }
+    }
+    
+    
+    public static String generaNick (String nombre,String apellido){
+        String usuario=nombre.substring(0,3)+ apellido.substring(0, 3);
+        usuario=usuario.toUpperCase();
+        int i=0;
+        try {
+            while(ConexionBDLocal.isNick(usuario)){
+            i++;
+            usuario=usuario.substring(0, 5)+i;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        System.out.println(usuario);
+    return usuario;
     }
 }

@@ -19,6 +19,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -89,5 +90,10 @@ public class Dashboard_adminController implements Initializable {
     @FXML
     private void modificar_estado_asignaturas(ActionEvent event) {
         Metodos.CargarModificarEstadoAsignaturas(root);
+    }
+
+    @FXML
+    private void btn_buscar_user(ActionEvent event) {
+        Metodos.AbrirBuscarUsuario(root);
     }
 }

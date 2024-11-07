@@ -16,16 +16,12 @@
 <?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
+<?import javafx.scene.text.TextFlow?>
 <?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <AnchorPane fx:id="root" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="739.0" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1" fx:controller="es.manueldonoso.academy.controllers.AltaUsuarioController">
    <children>
       <Rectangle arcHeight="5.0" arcWidth="5.0" fill="DODGERBLUE" height="58.0" stroke="BLACK" strokeType="INSIDE" width="739.0" />
-      <Text fill="WHITE" layoutX="221.0" layoutY="43.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Usuario">
-         <font>
-            <Font name="System Bold Italic" size="36.0" />
-         </font>
-      </Text>
       <FontIcon fill="WHITE" iconLiteral="fa-user" iconSize="40" layoutX="36.0" layoutY="43.0" />
       <GridPane alignment="BOTTOM_LEFT" layoutX="7.0" layoutY="58.0" prefHeight="376.0" prefWidth="739.0">
         <columnConstraints>
@@ -103,7 +99,7 @@
             <JFXButton fx:id="btn_tomarFoto" onAction="#TomarFoto" text="Tomar Foto" GridPane.columnIndex="5" GridPane.rowIndex="4" />
             <AnchorPane prefHeight="200.0" prefWidth="200.0" GridPane.columnIndex="4" GridPane.columnSpan="3" GridPane.rowIndex="1" GridPane.rowSpan="3">
                <children>
-                  <ImageView fx:id="iw" fitHeight="188.0" fitWidth="277.0" layoutX="1.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fx:id="imageView" fitHeight="188.0" fitWidth="277.0" layoutX="1.0" layoutY="8.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../images/incorgnito.png" />
                      </image>
@@ -111,7 +107,7 @@
                </children>
             </AnchorPane>
             <JFXButton fx:id="btn_cancelar" cancelButton="true" onAction="#cancelar_registro" text="Cancelar" GridPane.columnIndex="5" GridPane.rowIndex="6" />
-            <JFXButton fx:id="btn_aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.rowIndex="6" />
+            <JFXButton fx:id="btn_aceptar" onAction="#btn_aceptar" text="Aceptar" GridPane.columnIndex="2" GridPane.rowIndex="6" />
             <HBox alignment="CENTER" fillHeight="false" prefHeight="100.0" prefWidth="200.0" GridPane.columnSpan="4" GridPane.halignment="CENTER" GridPane.rowIndex="5" GridPane.valignment="CENTER">
                <children>
                   <RadioButton fx:id="rb_admin" mnemonicParsing="false" text="Administrador">
@@ -134,7 +130,21 @@
                   </RadioButton>
                </children>
             </HBox>
+            <JFXButton fx:id="btn_asignaturas" onAction="#btn_asignaturas" prefHeight="40.0" prefWidth="188.0" text="Asignaturas" GridPane.columnIndex="4" GridPane.columnSpan="2" GridPane.rowIndex="5">
+               <font>
+                  <Font name="System Bold Italic" size="18.0" />
+               </font>
+            </JFXButton>
          </children>
       </GridPane>
+      <TextFlow layoutX="5.0" layoutY="3.0" prefHeight="134.0" prefWidth="730.0" textAlignment="CENTER">
+         <children>
+            <Text fx:id="txt_titulo" fill="WHITE" strokeType="OUTSIDE" strokeWidth="0.0" text="Registrar Usuario">
+               <font>
+                  <Font name="System Bold Italic" size="36.0" />
+               </font>
+            </Text>
+         </children>
+      </TextFlow>
    </children>
 </AnchorPane>

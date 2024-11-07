@@ -8,6 +8,8 @@ import animatefx.animation.Swing;
 import com.github.sarxos.webcam.Webcam;
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import es.manueldonoso.academy.modelos.Usuario;
+import es.manueldonoso.academy.util.ConexionBDLocal;
 import es.manueldonoso.academy.util.Metodos;
 import es.manueldonoso.academy.util.Session;
 import java.awt.image.BufferedImage;
@@ -65,6 +67,7 @@ public class PerfilUsuarioController implements Initializable {
     private JFXButton btn_avalidar;
     @FXML
     private ImageView imageView;
+    private boolean eliminarFoto;
 
     /**
      * Initializes the controller class.
@@ -78,7 +81,14 @@ public class PerfilUsuarioController implements Initializable {
         txt_direccion.setText(Session.getUsuarioLogin().getDireccion());
         txt_email.setText(Session.getUsuarioLogin().getEmail());
         txt_telefono.setText(Session.getUsuarioLogin().getTelefono());
+        File file = new File("src/main/resources/images/users/" + Session.getUsuarioLogin().getId() + ".jpg");
 
+        if (file.exists()) {
+            Metodos.imagenView_cambiarImage(this.getClass(), imageView, file.getPath());
+        } else {
+            Metodos.imagenView_cambiarImage(this.getClass(), imageView, "src/main/resources/images/incorgnito.png");
+        }
+      eliminarFoto=false;
     }
 
     private BooleanProperty estadoCamara = new SimpleBooleanProperty(false);
@@ -110,11 +120,11 @@ public class PerfilUsuarioController implements Initializable {
         imageView.setImage(new Image(getClass().getResourceAsStream("/images/app/cargando.gif")));
 
         // Llamar al método de captura de foto
-        Metodos.CapturarFoto(imageView, estadoCamara, selWebCam, bufferedImage, imageProperty,"temp/foto.jpg");
+        Metodos.CapturarFoto(imageView, estadoCamara, selWebCam, bufferedImage, imageProperty, "temp/foto.jpg");
 
         // Volver a enlazar la propiedad de imagen
         imageView.imageProperty().bind(imageProperty);
-
+        btn_avalidar.setDisable(false);
     }
 
     @FXML
@@ -125,17 +135,29 @@ public class PerfilUsuarioController implements Initializable {
 
     @FXML
     private void btn_aceptar(ActionEvent event) {
+        eliminarFoto(eliminarFoto);
+        File f = new File("src/main/resources/temp/foto.jpg");
+        if (f.exists()) {
+            Metodos.copyFile(f, "src/main/resources/images/users/" + Session.getUsuarioLogin().getId() + ".jpg");
+            f.delete();
+        }
+        
+         guardardatos();
+           Metodos.cerrarCamara(estadoCamara, selWebCam);
         Metodos.closeEffect(root);
     }
 
     @FXML
     private void acep_btn_enable() {
         btn_avalidar.setDisable(false);
+       
     }
 
     @FXML
     private void imagen_default(ActionEvent event) {
         Metodos.imagenView_cambiarImage(this.getClass(), imageView, "src/main/resources/images/incorgnito.png");
+        eliminarFoto=true;
+        btn_avalidar.setDisable(false);
 
     }
 
@@ -145,9 +167,34 @@ public class PerfilUsuarioController implements Initializable {
         File f = Metodos.openImageFileChooser();
         System.out.println(f);
         if (f != null) {
-            if (Metodos.copyFileToTemp(f, "src/main/resources/temp/foto.jpg")) {
+            if (Metodos.copyFile(f, "src/main/resources/temp/foto.jpg")) {
                 Metodos.imagenView_cambiarImage(this.getClass(), imageView, "src/main/resources/temp/foto.jpg");
+                btn_avalidar.setDisable(false);
             }
+        }
+    }
+
+    private void guardardatos() {
+        Usuario user = Session.getUsuarioLogin();
+        user.setNombre(txt_nombre.getText());
+        user.setApellidos(txt_apellidos.getText());
+        user.setDireccion(txt_direccion.getText());
+        user.setEmail(txt_email.getText());
+        user.setTelefono(txt_telefono.getText());
+        File file = new File("src/main/resources/images/users/" + Session.getUsuarioLogin().getId() + ".jpg");
+        if (file.exists()) {
+            user.setUrlFoto("src/main/resources/images/users/" + Session.getUsuarioLogin().getId() + ".jpg");
+        } else {
+            user.setUrlFoto(null);
+        }
+          ConexionBDLocal.GuardarUsuario(user);
+   
+    }
+    
+    public static void eliminarFoto(boolean eliminar){
+        File file = new File("src/main/resources/images/users/" + Session.getUsuarioLogin().getId() + ".jpg");
+        if (eliminar) {
+            file.delete();
         }
     }
 }
