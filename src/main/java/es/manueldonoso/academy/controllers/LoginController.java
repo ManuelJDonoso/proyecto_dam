@@ -203,14 +203,14 @@ public class LoginController implements Initializable {
     }
 
     @FXML
-    private void abrirweb() {
+    private void abrirweb(String dir) {
         if (java.awt.Desktop.isDesktopSupported()) {
             java.awt.Desktop Dt = java.awt.Desktop.getDesktop();
             if (Dt.isSupported(java.awt.Desktop.Action.BROWSE)) {
 
                 java.net.URI uri;
                 try {
-                    uri = new java.net.URI("https://www.manueldonoso.es");
+                    uri = new java.net.URI(dir);
                     Dt.browse(uri);
                 } catch (URISyntaxException ex) {
                     Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);

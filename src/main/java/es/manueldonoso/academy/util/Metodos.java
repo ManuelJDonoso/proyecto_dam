@@ -13,6 +13,7 @@ import es.manueldonoso.academy.modelos.Usuario;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -734,21 +735,77 @@ public class Metodos {
             e.printStackTrace();
         }
     }
-    
-    
-    public static String generaNick (String nombre,String apellido){
-        String usuario=nombre.substring(0,3)+ apellido.substring(0, 3);
-        usuario=usuario.toUpperCase();
-        int i=0;
+
+    public static String generaNick(String nombre, String apellido) {
+        String usuario = nombre.substring(0, 3) + apellido.substring(0, 3);
+        usuario = usuario.toUpperCase();
+        int i = 0;
         try {
-            while(ConexionBDLocal.isNick(usuario)){
-            i++;
-            usuario=usuario.substring(0, 5)+i;
+            while (ConexionBDLocal.isNick(usuario)) {
+                i++;
+                usuario = usuario.substring(0, 5) + i;
             }
         } catch (SQLException ex) {
             Logger.getLogger(Metodos.class.getName()).log(Level.SEVERE, null, ex);
         }
         System.out.println(usuario);
-    return usuario;
+        return usuario;
+    }
+
+    /**
+     * Abre una ventana para seleccionar un archivo de imagen y convierte la
+     * imagen seleccionada en un arreglo de bytes (byte[]).
+     *
+     * @param stage La ventana principal de la aplicación, necesaria para
+     * mostrar el diálogo de selección de archivo.
+     * @return Un arreglo de bytes que representa la imagen seleccionada.
+     * Devuelve un arreglo vacío si no se selecciona ningún archivo o si ocurre
+     * algún error durante la lectura del archivo.
+     *
+     * <p>
+     * Este método abre un diálogo de selección de archivo mediante
+     * {@link FileChooser}, permitiendo al usuario seleccionar una imagen con
+     * extensiones .jpg, .jpeg o .png. Si el usuario selecciona una imagen, se
+     * lee el archivo y se convierte en un arreglo de bytes para su posterior
+     * uso.</p>
+     *
+     * <p>
+     * Ejemplo de uso:</p>
+     * <pre>
+     * Stage stage = new Stage();
+     * byte[] imageBytes = ImageToByte(stage);
+     * if (imageBytes.length > 0) {
+     *     // Procesar el arreglo de bytes de la imagen seleccionada
+     * }
+     * </pre>
+     */
+    public static byte[] ImageToByte(Stage stage) {
+        // Abrir un diálogo para seleccionar el archivo de imagen
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Seleccionar imagen");
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Archivos de Imagen", "*.jpg", "*.png", "*.jpeg")
+        );
+        File selectedFile = fileChooser.showOpenDialog(stage);
+
+        // Si el usuario no selecciona ningún archivo, devolver un arreglo de bytes vacío
+        if (selectedFile == null) {
+            return new byte[0];
+        }
+
+        // Convertir el archivo seleccionado a un arreglo de bytes
+        try (FileInputStream fis = new FileInputStream(selectedFile); ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+
+            byte[] buffer = new byte[1024];
+            int bytesRead;
+            while ((bytesRead = fis.read(buffer)) != -1) {
+                baos.write(buffer, 0, bytesRead);
+            }
+            return baos.toByteArray();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            return new byte[0];
+        }
     }
 }
